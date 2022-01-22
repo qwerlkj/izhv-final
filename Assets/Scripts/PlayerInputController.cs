@@ -148,15 +148,14 @@ public class PlayerInputController : MonoBehaviour
                 reloadingContext = context;
                 reloading = true;
                 myTime = 0f;
-                startReloading = context.startTime;
+                startReloading = context.time;
             }
             if (context.canceled)
             {
                 reloading = false;
-                if (context.time - startReloading < reloadTime)
+                if (myTime < reloadTime)
                 {
                     dropArrow();
-                    startReloading = 100f;
                 }
                 else
                 {

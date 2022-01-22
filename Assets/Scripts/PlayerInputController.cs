@@ -16,6 +16,7 @@ public class PlayerInputController : MonoBehaviour
     public GameObject arrowStartPosition;
     public Transform LUpperArm;
     public GameObject arrowInfo;
+    public Slider powerBar;
 
     public int maxArrows = 10;
     public int remainingArrows;
@@ -37,6 +38,7 @@ public class PlayerInputController : MonoBehaviour
         arrows = GameObject.FindGameObjectsWithTag("Arrow");
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
+        powerBar.value = 0f;
 
         if (reloadBar != null)
         {
@@ -85,6 +87,7 @@ public class PlayerInputController : MonoBehaviour
             Debug.Log("DRAGG");
             arrowPower -= mouseY * 0.1f;
             arrowPower = Math.Clamp(arrowPower, 0f, maxPower);
+            powerBar.value = arrowPower / 100f;
             Debug.Log(arrowPower);
             return;
         };
@@ -171,6 +174,7 @@ public class PlayerInputController : MonoBehaviour
 
         if (loaded && context.canceled && dragging)
         {
+            powerBar.value = 0f;
             dragging = false;
             if (arrowPower < 0.01f) return;
             resetReloadBar();

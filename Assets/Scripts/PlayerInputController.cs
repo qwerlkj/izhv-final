@@ -23,7 +23,7 @@ public class PlayerInputController : MonoBehaviour
     public float reloadTime = 5f, maxPower = 100f;
     private bool reloading = false, loaded = false, dragging = false;
     private InputAction.CallbackContext reloadingContext;
-    private double startReloading = 0f;
+    private double startReloading = 100f;
     private float arrowPower = 0f;
     public Slider reloadBar;
     private Image reloadBarImage;
@@ -131,6 +131,7 @@ public class PlayerInputController : MonoBehaviour
         
         if (!loaded)
         {
+            
             if (context.started)
             {
                 if (remainingArrows <= 0) return;
@@ -155,6 +156,7 @@ public class PlayerInputController : MonoBehaviour
                 if (context.time - startReloading < reloadTime)
                 {
                     dropArrow();
+                    startReloading = 100f;
                 }
                 else
                 {
@@ -187,16 +189,20 @@ public class PlayerInputController : MonoBehaviour
     {
         //Transform arrow with power to destination
         Debug.Log("SHOOT");
+        if (tempArrow == null) return;
         var passVars = tempArrow.GetComponent<ArrowShoot>();
         passVars.shoot = true;
         passVars.power = arrowPower;
         
         arrowPower = 0f;
+        tempArrow = null;
     }
 
     private void dropArrow()
     {
+        if (tempArrow == null) return;
         tempArrow.GetComponent<ArrowShoot>().drop = true;
+        tempArrow = null;
     }
 
     public void collectArrow(InputAction.CallbackContext context)
